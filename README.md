@@ -1,6 +1,6 @@
 # webmask
 
-一个[油猴](https://www.tampermonkey.net/)插件、添加一个遮罩层挡住字幕用来学习外语，
+一个[油猴](https://www.tampermonkey.net/)插件、添加一个遮罩层挡住字幕用来学习外语
 ## feature
 - 按快捷键c来显示/隐藏。
 - 鼠标可以上下拖动遮罩层来调整位置。
