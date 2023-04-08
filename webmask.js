@@ -49,20 +49,31 @@
       localStorage.setItem("bilibili_player_settings", JSON.stringify(obj));
     }
   })();
+  function waitForElm(selector) {
+    return new Promise(resolve => {
+      if (document.querySelector(selector)) {
+        return resolve(document.querySelector(selector));
+      }
 
-  function docReady(fn) {
-    // see if DOM is already available
-    if (
-      document.readyState === "complete" ||
-      document.readyState === "interactive"
-    ) {
-      // call on next available tick
-      setTimeout(fn, 1000);
-    } else {
-      document.addEventListener("DOMContentLoaded", fn);
-    }
+      const observer = new MutationObserver(mutations => {
+        if (document.querySelector(selector)) {
+          resolve(document.querySelector(selector));
+          observer.disconnect();
+        }
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    });
   }
-  docReady(function () {
+  waitForElm('video').then((elm) => {
+    //alert("finded")
+    main()
+  });
+  //window.onload=main()
+  function main() {
     let video = document.querySelector("video").parentNode?.parentNode;
     if (!video && window.location.href.indexOf("bilibili") > 0) {
       video =
@@ -138,7 +149,7 @@
         pointY = event.offsetY;
       }
     };
-    mask.onmouseup = function () {
+    document.onmouseup = function () {
       if (moveFlag) {
         moveFlag = false;
         resizeFlag = false;
@@ -157,7 +168,7 @@
         localStorage.setItem("maskHeight", mask.offsetHeight);
       }
     };
-    mask.onmousemove = function () {
+    document.onmousemove = function () {
       if (moveFlag === true) {
         window.getSelection
           ? window.getSelection().removeAllRanges()
@@ -173,8 +184,8 @@
       }
     };
     mask.onmouseleave = function () {
-      moveFlag = false;
-      resizeFlag = false;
+      // moveFlag = false;
+      // resizeFlag = false;
     };
     window.onscroll = function () {
       if (window.scrollY > 200) {
@@ -183,5 +194,5 @@
         mask.style.opacity = opacity;
       }
     };
-  });
+  };
 })();
